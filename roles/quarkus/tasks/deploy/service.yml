@@ -1,6 +1,6 @@
 ---
 - block:
-    - name: "Deploy application from  to target system"
+    - name: "Copy application from build source to deploy directory on target system"
       ansible.builtin.copy:
         src: "{{ quarkus_app_src_dir }}"
         dest: "{{ quarkus_path_to_folder_to_deploy }}"
@@ -24,6 +24,15 @@
       when:
         - quarkus_app_service_name is defined
 
+    - name: "Deploy Systemd configuration for Postgresql"
+      ansible.builtin.template:
+        src: "postgresql_systemd.j2"
+        dest: "{{ quarkus_systemd_home }}/postgresql-petclinic.service"
+        owner: "root"
+        group: "root"
+        mode: 0640
+      register: postgresql_deploy_systemd_service_conf
+
     - name: "Perform daemon-reload to ensure the changes are picked up"
       ansible.builtin.systemd:
         daemon_reload: true
@@ -32,6 +41,15 @@
         - quarkus_deploy_systemd_service_conf is defined
         - quarkus_deploy_systemd_service_conf.changed is defined
         - quarkus_deploy_systemd_service_conf.changed
+        - postgresql_deploy_systemd_service_conf is defined
+        - postgresql_deploy_systemd_service_conf.changed is defined
+        - postgresql_deploy_systemd_service_conf.changed
+
+    - name: "Ensure Postgresql service is running."
+      ansible.builtin.service:
+        name: "postgresql-petclinic"
+        state: started
+        enabled: true
 
     - name: "Ensure Quarkus app service is running."
       ansible.builtin.service:
