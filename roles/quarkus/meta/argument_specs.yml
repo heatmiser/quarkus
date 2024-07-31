@@ -114,3 +114,8 @@ argument_specs:
                 default: "firewalld"
                 description: "TODO document argument"
                 type: "str"
+
+            quarkus_build_optional_parameters:
+                default: " "
+                description: "TODO document argument"
+                type: "str"

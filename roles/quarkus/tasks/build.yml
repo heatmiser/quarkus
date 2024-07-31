@@ -53,7 +53,7 @@
 #        - quarkus_apply_dos2unix_to_mvnw is defined and quarkus_apply_dos2unix_to_mvnw
 
     - name: "Build the App using Maven"
-      ansible.builtin.command: "{{ quarkus_build_shell_interpreter }} ./mvnw package"
+      ansible.builtin.command: "{{ quarkus_build_shell_interpreter }} ./mvnw {{ quarkus_build_optional_parameters | default(omit) }} package"
       register: mvn_build
       environment:
         JAVA_HOME: "{{ quarkus_java_home }}"
