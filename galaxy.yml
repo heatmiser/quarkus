@@ -1,7 +1,7 @@
 ---
 namespace: middleware_automation
 name: quarkus
-version: "1.0.1"
+version: "1.0.2"
 readme: README.md
 authors:
   - Romain Pelisse <rpelisse@redhat.com>
@@ -16,9 +16,9 @@ tags:
   - java
 dependencies:
   "ansible.posix": ">=1.4.0"
-repository: https://github.com/ansible-middleware/quarkus
+repository: https://github.com/heatmiser/quarkus
 documentation: https://ansible-middleware.github.io/quarkus
-homepage: https://github.com/ansible-middleware/quarkus
+homepage: https://github.com/heatmiser/quarkus
 issues: https://github.com/ansible-middleware/quarkus/issues
 build_ignore:
   - .gitignore
