@@ -1,0 +1,31 @@
+[Unit]
+Description=Postgresql Container for quarkus-petclinic
+Wants=network-online.target
+After=network-online.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Environment="POSTGRES_IMAGE=postgres:14"
+Environment="POSTGRES_USER=developer"
+Environment="POSTGRES_PASSWORD=developer"
+Environment="POSTGRES_DB=mydb"
+TimeoutStartSec=0
+TimeoutStopSec=70
+ExecStartPre=/usr/bin/podman pull $POSTGRES_IMAGE
+ExecStart=/usr/bin/podman run \
+        -e "POSTGRES_USER=${POSTGRES_USER}" \
+        -e "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" \
+        -e "POSTGRES_DB=${POSTGRES_DB}" \
+        -p 5432:5432 \
+        -d \
+        --name postgresql-petclinic \
+        --rm $POSTGRES_IMAGE
+ExecStop=/usr/bin/podman stop \
+        -t 10 postgresql-petclinic
+ExecStopPost=/usr/bin/podman stop \
+        -t 10 postgresql-petclinic
+#Restart=on-abnormal
+Restart=on-failure
+Type=forking
